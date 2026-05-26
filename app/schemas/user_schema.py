@@ -1,7 +1,7 @@
-from pydantic import BaseModel, ConfigDict, EmailStr, Field
+from pydantic import AliasChoices, BaseModel, ConfigDict, EmailStr, Field
 from uuid import UUID
 from datetime import datetime
-from typing import Optional
+from typing import Any, Optional
 
 class OrgCreate(BaseModel):
     name: str
@@ -19,17 +19,21 @@ class RegisterRequest(BaseModel):
     company_name: str = Field(..., alias="companyName")
 
 class UserLogin(BaseModel):
-    email: EmailStr
-    password: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    identifier: str = Field(validation_alias=AliasChoices("email", "username", "kioskUsername"))
+    password: str = Field(validation_alias=AliasChoices("password", "kioskPassword"))
 
 class Token(BaseModel):
     access_token: str
     token_type: str = "bearer"
 
 class EmployeeCreate(BaseModel):
-    name: str
-    username: str
-    password: str
+    model_config = ConfigDict(populate_by_name=True)
+
+    name: str = Field(validation_alias=AliasChoices("name", "employeeName"))
+    username: str = Field(validation_alias=AliasChoices("username", "kioskUsername"))
+    password: str = Field(validation_alias=AliasChoices("password", "kioskPassword"))
     email: Optional[EmailStr] = None
 
 class EmployeeResponse(BaseModel):
@@ -49,7 +53,12 @@ class LogListResponse(BaseModel):
     has_more: bool
 
 class ActivityLogCreate(BaseModel):
+    model_config = ConfigDict(populate_by_name=True)
+
     template: str
-    log_data: dict
-    ip_address: Optional[str] = None
-    device_info: Optional[dict] = None
+    log_data: dict[str, Any] = Field(validation_alias=AliasChoices("log_data", "logData"))
+    ip_address: str | None = Field(default=None, validation_alias=AliasChoices("ip_address", "ipAddress"))
+    device_info: dict[str, Any] | None = Field(
+        default=None,
+        validation_alias=AliasChoices("device_info", "deviceInfo"),
+    )
