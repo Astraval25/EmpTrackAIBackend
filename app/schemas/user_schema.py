@@ -1,7 +1,7 @@
+from typing import Annotated, Any, Optional
 from pydantic import AliasChoices, BaseModel, ConfigDict, EmailStr, Field
 from uuid import UUID
 from datetime import datetime
-from typing import Any, Optional
 
 class OrgCreate(BaseModel):
     name: str
@@ -21,8 +21,8 @@ class RegisterRequest(BaseModel):
 class UserLogin(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    identifier: str = Field(validation_alias=AliasChoices("email", "username", "kioskUsername"))
-    password: str = Field(validation_alias=AliasChoices("password", "kioskPassword"))
+    identifier: Annotated[str, Field(validation_alias=AliasChoices("email", "username", "kioskUsername"))]
+    password: Annotated[str, Field(validation_alias=AliasChoices("password", "kioskPassword"))]
 
 class Token(BaseModel):
     access_token: str
@@ -31,9 +31,9 @@ class Token(BaseModel):
 class EmployeeCreate(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    name: str = Field(validation_alias=AliasChoices("name", "employeeName"))
-    username: str = Field(validation_alias=AliasChoices("username", "kioskUsername"))
-    password: str = Field(validation_alias=AliasChoices("password", "kioskPassword"))
+    name: Annotated[str, Field(validation_alias=AliasChoices("name", "employeeName"))]
+    username: Annotated[str, Field(validation_alias=AliasChoices("username", "kioskUsername"))]
+    password: Annotated[str, Field(validation_alias=AliasChoices("password", "kioskPassword"))]
     email: Optional[EmailStr] = None
 
 class EmployeeResponse(BaseModel):
@@ -56,9 +56,6 @@ class ActivityLogCreate(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
     template: str
-    log_data: dict[str, Any] = Field(validation_alias=AliasChoices("log_data", "logData"))
-    ip_address: str | None = Field(default=None, validation_alias=AliasChoices("ip_address", "ipAddress"))
-    device_info: dict[str, Any] | None = Field(
-        default=None,
-        validation_alias=AliasChoices("device_info", "deviceInfo"),
-    )
+    log_data: Annotated[dict[str, Any], Field(validation_alias=AliasChoices("log_data", "logData"))]
+    ip_address: Annotated[Optional[str], Field(validation_alias=AliasChoices("ip_address", "ipAddress"))] = None
+    device_info: Annotated[Optional[dict[str, Any]], Field(validation_alias=AliasChoices("device_info", "deviceInfo"))] = None

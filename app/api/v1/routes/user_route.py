@@ -38,7 +38,7 @@ def register(register_request: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.get("/company-name", response_model=dict)
 def get_company_name(username: str = Query(...), db: Session = Depends(get_db)):
-    employee = db.query(Employee).filter(Employee.username == username).first()
+    employee = db.query(Employee).filter(Employee.username.ilike(username)).first()
     if employee is None or employee.org is None:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="User not found")
     return {"companyName": employee.org.name}
