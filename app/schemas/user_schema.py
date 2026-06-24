@@ -21,7 +21,7 @@ class RegisterRequest(BaseModel):
 class UserLogin(BaseModel):
     model_config = ConfigDict(populate_by_name=True)
 
-    identifier: Annotated[str, Field(validation_alias=AliasChoices("email", "username", "kioskUsername"))]
+    identifier: Annotated[str, Field(validation_alias=AliasChoices("email", "username", "identifier", "kioskUsername"))]
     password: Annotated[str, Field(validation_alias=AliasChoices("password", "kioskPassword"))]
 
 class Token(BaseModel):
