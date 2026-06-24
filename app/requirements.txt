@@ -1,19 +1,20 @@
-fastapi==0.115.0
-uvicorn[standard]==0.30.0
+fastapi==0.115.12
+uvicorn[standard]==0.34.3
 
 # Database
-sqlalchemy==2.0.35
-psycopg2-binary==2.9.9
-alembic==1.13.2
+sqlalchemy==2.0.41
+psycopg2-binary==2.9.10
+alembic==1.15.2
 
 # Security & Auth
 python-jose[cryptography]==3.3.0
 passlib[bcrypt]==1.7.4
-python-multipart==0.0.9
+python-multipart==0.0.20
 
 # Environment & Config
-pydantic-settings==2.5.2
-python-dotenv==1.0.1
+pydantic==2.11.4
+pydantic-settings==2.9.1
+python-dotenv==1.1.0
 
 # Email validation
 email-validator==2.2.0
